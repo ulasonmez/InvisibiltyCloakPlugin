@@ -13,7 +13,7 @@ public class inviscloak {
 	public static ItemStack clay = new ItemStack(Material.GRAY_DYE);
 	public ItemStack getCloak() {
 		ItemMeta meta = cloak.getItemMeta();
-		meta.setDisplayName(ChatColor.LIGHT_PURPLE+"Gorunmezlik Pelerini");
+		meta.setDisplayName(ChatColor.LIGHT_PURPLE+"Invisibilty Cloak");
 		ArrayList<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.YELLOW+"RIGHT CLICK");
 		lore.add(ChatColor.GREEN+"Invisible"+ChatColor.WHITE+" For "+ChatColor.GREEN+" 30s");
