@@ -1,18 +1,14 @@
 package me.Blume.InvisibilityCloak.Listeners;
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -23,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import me.Blume.InvisibilityCloak.Main;
 import me.Blume.InvisibilityCloak.Cloak.inviscloak;
+import net.md_5.bungee.api.ChatColor;
 public class events implements Listener {
 	private Main plugin;
 	public events(Main plugin) {
@@ -49,29 +46,34 @@ public class events implements Listener {
 	}
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
-		List<ItemStack> drops = event.getDrops(); 
-		ListIterator<ItemStack> litr = drops.listIterator();	  
-		while( litr.hasNext() )
-		{
-			ItemStack stack = litr.next();
-
-			if(stack.isSimilar(invcloak.getCloak()) )
+		if(plugin.getcloakplayer().contains(event.getEntity().getUniqueId())) {
+		
+			List<ItemStack> drops = event.getDrops(); 
+			ListIterator<ItemStack> litr = drops.listIterator();	  
+			while( litr.hasNext() )
 			{
-				litr.remove();
+				ItemStack stack = litr.next();
+
+				if(stack.isSimilar(invcloak.getCloak()) )
+				{
+					litr.remove();
+				}
 			}
 		}
 	}
 	@EventHandler
 	public void onEntityDeath2(EntityDeathEvent event) {
-		List<ItemStack> drops = event.getDrops(); 
-		ListIterator<ItemStack> litr = drops.listIterator();	  
-		while( litr.hasNext() )
-		{
-			ItemStack stack = litr.next();
-
-			if(stack.isSimilar(invcloak.getClay()) )
+		if(plugin.getcloakplayer().contains(event.getEntity().getUniqueId())) {
+			List<ItemStack> drops = event.getDrops(); 
+			ListIterator<ItemStack> litr = drops.listIterator();	  
+			while( litr.hasNext() )
 			{
-				litr.remove();
+				ItemStack stack = litr.next();
+
+				if(stack.isSimilar(invcloak.getClay()) )
+				{
+					litr.remove();
+				}
 			}
 		}
 	}
@@ -109,6 +111,15 @@ public class events implements Listener {
 					invcloak.removeCloak(player);
 					player.getInventory().setItem(slot1, invcloak.getClay());
 					player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,600,1));
+					player.sendMessage(ChatColor.AQUA+"You turned invisible");
+					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						@Override
+						public void run() {
+							player.sendMessage(ChatColor.AQUA+"You turned visible");
+						}
+					}, 30*20L);
+					
+					
 					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						@Override
 						public void run() {
@@ -127,7 +138,8 @@ public class events implements Listener {
 							player.getInventory().setItem(slot, invcloak.getCloak());
 
 						}
-					},30*20L);
+					},90*20L);
+					
 				}
 			}
 		}

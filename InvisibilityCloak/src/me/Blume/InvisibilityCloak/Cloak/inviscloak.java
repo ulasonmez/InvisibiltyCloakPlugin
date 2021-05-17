@@ -9,16 +9,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class inviscloak {
-
 	public static ItemStack cloak= new ItemStack(Material.ELYTRA);
-	public static ItemStack clay = new ItemStack(Material.CLAY_BALL);
+	public static ItemStack clay = new ItemStack(Material.GRAY_DYE);
 	public ItemStack getCloak() {
 		ItemMeta meta = cloak.getItemMeta();
-		meta.setDisplayName(ChatColor.LIGHT_PURPLE+"Invisibilty Cloak");
+		meta.setDisplayName(ChatColor.LIGHT_PURPLE+"Gorunmezlik Pelerini");
 		ArrayList<String> lore = new ArrayList<String>();
 		lore.add(ChatColor.YELLOW+"RIGHT CLICK");
-		lore.add("Become Completely");
-		lore.add(ChatColor.GREEN+"Invisible"+ChatColor.GRAY+" For"+ChatColor.GREEN+" 30s");
+		lore.add(ChatColor.GREEN+"Invisible"+ChatColor.WHITE+" For "+ChatColor.GREEN+" 30s");
 		meta.setLore(lore);
 		cloak.setItemMeta(meta);
 		return cloak;
@@ -28,11 +26,12 @@ public class inviscloak {
 	}
 	public ItemStack getClay() {
 		ItemMeta meta = clay.getItemMeta();
-		meta.setDisplayName(ChatColor.AQUA+"You are Invisible");
+		meta.setDisplayName(ChatColor.AQUA+"Cooldown");
+		
 		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.WHITE+"Wait for 30s");
-		clay.setItemMeta(meta);
+		lore.add(ChatColor.WHITE+"Wait for 60s");
 		meta.setLore(lore);
+		clay.setItemMeta(meta);
 		return clay;
 	}
 	public void removeClay(Player player) {

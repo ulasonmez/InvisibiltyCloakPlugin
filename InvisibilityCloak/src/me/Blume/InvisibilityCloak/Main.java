@@ -13,8 +13,6 @@ public class Main extends JavaPlugin{
 	HashSet<UUID> cloakplayer = new HashSet<UUID>();
 	@Override
 	public void onEnable() {
-		//getCommand("copyandpastestop").setExecutor(new ItemInteract2(this));
-		//getServer().getPluginManager().registerEvents(new Items(), this);
 		getCommand("addcloak").setExecutor(new addCloakToPlayer(this));
 		getCommand("removecloak").setExecutor(new removeCloak(this));
 		getServer().getPluginManager().registerEvents(new events(this), this);

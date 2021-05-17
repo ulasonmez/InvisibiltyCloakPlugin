@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.Blume.InvisibilityCloak.Main;
 import me.Blume.InvisibilityCloak.Cloak.inviscloak;
+import net.md_5.bungee.api.ChatColor;
 
 public class removeCloak implements CommandExecutor{
 	@SuppressWarnings("unused")
@@ -22,7 +23,7 @@ public class removeCloak implements CommandExecutor{
 			if(args.length==0) {
 				if(plugin.getcloakplayer().contains(player.getUniqueId())) {
 					if(label.equals("removecloak")) {
-						player.sendMessage("basarili cikarma");
+						player.sendMessage(ChatColor.AQUA+"Cloak removed from player");
 						invcloak.removeCloak(player);
 						plugin.removeplayer(player.getUniqueId());
 					}

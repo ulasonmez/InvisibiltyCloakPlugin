@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import me.Blume.InvisibilityCloak.Main;
 import me.Blume.InvisibilityCloak.Cloak.inviscloak;
+import net.md_5.bungee.api.ChatColor;
 
 public class addCloakToPlayer implements CommandExecutor{
 	@SuppressWarnings("unused")
@@ -23,7 +24,7 @@ public class addCloakToPlayer implements CommandExecutor{
 				if(label.equals("addcloak")) {
 					if(!(plugin.getcloakplayer().contains(player.getUniqueId()))) {
 						plugin.addplayer(player.getUniqueId());
-						player.sendMessage("basarili ekleme");
+						player.sendMessage(ChatColor.AQUA+"Cloak added to player");
 						player.getInventory().addItem(invcloak.getCloak());
 					}
 				}
