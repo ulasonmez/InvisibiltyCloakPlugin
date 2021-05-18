@@ -25,6 +25,7 @@ public class events implements Listener {
 	public events(Main plugin) {
 		this.plugin=plugin;
 	}
+	int id1;
 	inviscloak invcloak = new inviscloak();
 	@EventHandler
 	public void elytraDrops(PlayerDropItemEvent event) {
@@ -59,6 +60,7 @@ public class events implements Listener {
 					litr.remove();
 				}
 			}
+			Bukkit.getScheduler().cancelTask(id1);
 		}
 	}
 	@EventHandler
@@ -75,6 +77,7 @@ public class events implements Listener {
 					litr.remove();
 				}
 			}
+			Bukkit.getScheduler().cancelTask(id1);
 		}
 	}
 	@EventHandler
@@ -120,7 +123,7 @@ public class events implements Listener {
 					}, 30*20L);
 					
 					
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					id1=Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							int slot = -1;
@@ -138,7 +141,7 @@ public class events implements Listener {
 							player.getInventory().setItem(slot, invcloak.getCloak());
 
 						}
-					},90*20L);
+					},60*20L);
 					
 				}
 			}
