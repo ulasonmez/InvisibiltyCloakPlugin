@@ -28,9 +28,6 @@ public class inviscloak {
 		ItemMeta meta = clay.getItemMeta();
 		meta.setDisplayName(ChatColor.AQUA+"Cooldown");
 		
-		ArrayList<String> lore = new ArrayList<String>();
-		lore.add(ChatColor.WHITE+"Wait for 60s");
-		meta.setLore(lore);
 		clay.setItemMeta(meta);
 		return clay;
 	}

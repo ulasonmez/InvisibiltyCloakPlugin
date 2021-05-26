@@ -2,7 +2,6 @@ package me.Blume.InvisibilityCloak.Listeners;
 
 import java.util.List;
 import java.util.ListIterator;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,16 +15,19 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
+import org.bukkit.scheduler.BukkitTask;
 import me.Blume.InvisibilityCloak.Main;
 import me.Blume.InvisibilityCloak.Cloak.inviscloak;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 public class events implements Listener {
 	private Main plugin;
 	public events(Main plugin) {
 		this.plugin=plugin;
 	}
-	int id1;
+	int id1,id2,a,c;
+	public static BukkitTask task,task2;
 	inviscloak invcloak = new inviscloak();
 	@EventHandler
 	public void elytraDrops(PlayerDropItemEvent event) {
@@ -48,36 +50,25 @@ public class events implements Listener {
 	@EventHandler
 	public void onEntityDeath(EntityDeathEvent event) {
 		if(plugin.getcloakplayer().contains(event.getEntity().getUniqueId())) {
-		
 			List<ItemStack> drops = event.getDrops(); 
 			ListIterator<ItemStack> litr = drops.listIterator();	  
+			Player player= (Player) event.getEntity();
 			while( litr.hasNext() )
 			{
 				ItemStack stack = litr.next();
 
-				if(stack.isSimilar(invcloak.getCloak()) )
+				if(stack.isSimilar(invcloak.getCloak()) || stack.isSimilar(invcloak.getClay()) )
 				{
+					player.getInventory().remove(invcloak.getClay());
+					player.getInventory().remove(invcloak.getCloak());
 					litr.remove();
 				}
 			}
 			Bukkit.getScheduler().cancelTask(id1);
-		}
-	}
-	@EventHandler
-	public void onEntityDeath2(EntityDeathEvent event) {
-		if(plugin.getcloakplayer().contains(event.getEntity().getUniqueId())) {
-			List<ItemStack> drops = event.getDrops(); 
-			ListIterator<ItemStack> litr = drops.listIterator();	  
-			while( litr.hasNext() )
-			{
-				ItemStack stack = litr.next();
-
-				if(stack.isSimilar(invcloak.getClay()) )
-				{
-					litr.remove();
-				}
-			}
-			Bukkit.getScheduler().cancelTask(id1);
+			Bukkit.getScheduler().cancelTask(id2);
+			task.cancel();
+			task2.cancel();
+			
 		}
 	}
 	@EventHandler
@@ -113,17 +104,36 @@ public class events implements Listener {
 					if (slot1 == -1) return;
 					invcloak.removeCloak(player);
 					player.getInventory().setItem(slot1, invcloak.getClay());
-					player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,600,1));
+					player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,plugin.getConfig().getInt("invistime")*20,1));
 					player.sendMessage(ChatColor.AQUA+"You turned invisible");
-					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					id1=Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							player.sendMessage(ChatColor.AQUA+"You turned visible");
 						}
-					}, 30*20L);
+					}, plugin.getConfig().getInt("invistime")*20L);
+					a=plugin.getConfig().getInt("invistime");
+					task=Bukkit.getScheduler().runTaskTimer(plugin, new Runnable(){
+						@Override
+						public void run() {
+							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+""+a+ChatColor.WHITE+" seconds left"));
+							a--;
+							if(a==0) {
+								task.cancel();
+						}
+					}}, 0L, 20L);
 					
-					
-					id1=Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+					c=plugin.getConfig().getInt("cooldown");
+					task2=Bukkit.getScheduler().runTaskTimer(plugin, new Runnable(){
+						@Override
+						public void run() {
+							player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+""+c+ChatColor.WHITE+" seconds cooldown"));
+							c--;
+							if(c==0) {
+								task2.cancel();
+						}
+					}}, plugin.getConfig().getInt("invistime")*20L, 20L);
+					id2=Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 						@Override
 						public void run() {
 							int slot = -1;
@@ -135,14 +145,12 @@ public class events implements Listener {
 								slot = i;
 								break;
 							}
-
-
 							invcloak.removeClay(player);
 							player.getInventory().setItem(slot, invcloak.getCloak());
 
 						}
-					},60*20L);
-					
+					},(plugin.getConfig().getInt("cooldown")+plugin.getConfig().getInt("invistime"))*20L);
+
 				}
 			}
 		}
@@ -159,4 +167,7 @@ public class events implements Listener {
 
 		}
 	}
+
+
 }
+

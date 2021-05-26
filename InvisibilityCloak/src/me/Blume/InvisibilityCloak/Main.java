@@ -16,6 +16,7 @@ public class Main extends JavaPlugin{
 		getCommand("addcloak").setExecutor(new addCloakToPlayer(this));
 		getCommand("removecloak").setExecutor(new removeCloak(this));
 		getServer().getPluginManager().registerEvents(new events(this), this);
+		loadConfig();
 	}
 	public void onDisable() {
 		
@@ -30,6 +31,9 @@ public class Main extends JavaPlugin{
 	public HashSet<UUID> getcloakplayer() {
 		return this.cloakplayer;
 	}
-	
+	public void loadConfig() {
+		getConfig().options().copyDefaults(true);
+		saveConfig();
+	}
 	
 }
